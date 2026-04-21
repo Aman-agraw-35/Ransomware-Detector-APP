@@ -1,4 +1,7 @@
 {
-  "decision_threshold": 0.3,
-  "reason": "Calibrated on held-out test set to achieve FNR<5% and FPR<5%"
+  "decision_threshold": 0.55,
+  "ensemble_weights": {
+    "bilstm": 0.2,
+    "random_forest": 0.8
+  }
 }

@@ -43,7 +43,7 @@ class MLService:
         self.model_path           = Path(os.getenv("MODEL_PATH",           artifacts_dir / "bilstm_attention_model.keras"))
         self.attn_model_path      = Path(os.getenv("ATTN_MODEL_PATH",      artifacts_dir / "bilstm_attention_with_weights.keras"))
         self.scaler_path          = Path(os.getenv("SCALER_PATH",          artifacts_dir / "scaler.pkl"))
-        self.xgb_path             = artifacts_dir / "xgb_model.pkl"
+        self.xgb_path             = artifacts_dir / "xgb_model.pkl"   # RandomForest or XGBoost
         self.feature_names_path   = Path(os.getenv("FEATURE_NAMES_PATH",   artifacts_dir / "feature_names.json"))
         self.group_config_path    = Path(os.getenv("GROUP_CONFIG_PATH",     artifacts_dir / "group_config.json"))
         self.background_path      = Path(os.getenv("SHAP_BACKGROUND_PATH", artifacts_dir / "shap_background.npy"))
@@ -56,13 +56,15 @@ class MLService:
         self._mock       = explicit_mock or artifacts_absent
 
         if self._mock:
-            self.model         = None
-            self.attn_model    = None
-            self.scaler        = None
-            self.xgb_model     = None
-            self.feature_names = self._mock_feature_names()
-            self.group_config  = self._mock_group_config()
-            self.threshold     = 0.5
+            self.model          = None
+            self.attn_model     = None
+            self.scaler         = None
+            self.xgb_model      = None
+            self.feature_names  = self._mock_feature_names()
+            self.group_config   = self._mock_group_config()
+            self.threshold      = 0.5
+            self.bilstm_weight  = 0.4
+            self.rf_weight      = 0.6
         else:
             import joblib
             import tensorflow as tf
@@ -71,21 +73,27 @@ class MLService:
 
             self.model        = self._load_model(self.model_path, tf)
             self.attn_model   = self._load_attention_model(tf, Model)
-            self.scaler       = joblib.load(self.scaler_path) if self.scaler_path.exists() else None
-            self.xgb_model    = joblib.load(self.xgb_path) if self.xgb_path.exists() else None
+            self.scaler        = joblib.load(self.scaler_path) if self.scaler_path.exists() else None
+            self.xgb_model     = joblib.load(self.xgb_path) if self.xgb_path.exists() else None
             self.feature_names = self._load_feature_names()
             self.group_config  = self._load_group_config()
-            self.threshold     = self._load_threshold()
+            self.threshold, self.bilstm_weight, self.rf_weight = self._load_threshold()
             self.shap_explainer = None
 
     # ── Threshold ────────────────────────────────────────────────────────────
 
-    def _load_threshold(self) -> float:
+    def _load_threshold(self) -> tuple:
+        """Returns (threshold, bilstm_weight, ensemble_weight)."""
         if self.threshold_config_path.exists():
             with open(self.threshold_config_path, "r", encoding="utf-8") as f:
                 cfg = json.load(f)
-            return float(cfg.get("decision_threshold", 0.5))
-        return 0.5
+            threshold  = float(cfg.get("decision_threshold", 0.5))
+            ew         = cfg.get("ensemble_weights", {})
+            bilstm_w   = float(ew.get("bilstm", 0.4))
+            # support both key names
+            rf_w       = float(ew.get("random_forest", ew.get("xgboost", 0.6)))
+            return threshold, bilstm_w, rf_w
+        return 0.5, 0.4, 0.6
 
     # ── Warm-up ──────────────────────────────────────────────────────────────
 
@@ -262,10 +270,10 @@ class MLService:
             prediction, attention = self.attn_model.predict(sequence, verbose=0)
             bilstm_prob = float(prediction[0, 0])
 
-            # XGBoost ensemble: use flat scaled features
+            # Ensemble: weights loaded from threshold_config.json (RF dominant to reduce FP)
             if self.xgb_model is not None:
-                xgb_prob = float(self.xgb_model.predict_proba(vector_scaled)[0, 1])
-                confidence = 0.4 * bilstm_prob + 0.6 * xgb_prob
+                rf_prob    = float(self.xgb_model.predict_proba(vector_scaled)[0, 1])
+                confidence = self.bilstm_weight * bilstm_prob + self.rf_weight * rf_prob
             else:
                 confidence = bilstm_prob
 

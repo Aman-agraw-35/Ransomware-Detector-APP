@@ -10,15 +10,15 @@
   ],
   "groups": {
     "security_flags": [
-      6,
-      7,
       5,
+      6,
+      4,
+      7,
       8,
-      9,
-      10
+      9
     ],
     "architecture": [
-      4,
+      10,
       14
     ],
     "presence_flags": [

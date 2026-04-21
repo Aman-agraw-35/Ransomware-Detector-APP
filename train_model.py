@@ -27,7 +27,6 @@ ensure("imblearn", "imbalanced-learn")
 ensure("joblib")
 ensure("shap")
 ensure("tensorflow")
-ensure("xgboost")
 
 import json, os, random
 import joblib
@@ -35,14 +34,13 @@ import numpy as np
 import pandas as pd
 import shap
 import tensorflow as tf
-import xgboost as xgb
 
 from imblearn.over_sampling import SMOTE
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (accuracy_score, classification_report,
                              confusion_matrix, f1_score, roc_auc_score)
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.calibration import CalibratedClassifierCV
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.layers import (LSTM, BatchNormalization, Bidirectional,
                                      Dense, Dropout, Input)
@@ -191,23 +189,16 @@ X_val_seq   = build_seq(X_val_sc)
 X_test_seq  = build_seq(X_test_sc)
 print(f"      Seq shape: {X_train_seq.shape}")
 
-# ── XGBoost (flat features, no sequencing) ────────────────────────────────────
-print("\n[6/9] Training XGBoost classifier ...")
-xgb_model = xgb.XGBClassifier(
-    n_estimators=500, max_depth=6, learning_rate=0.05,
-    subsample=0.8, colsample_bytree=0.8,
-    scale_pos_weight=1.0, eval_metric="auc",
-    random_state=SEED, n_jobs=-1,
-    early_stopping_rounds=20,
+# ── Random Forest (flat features, no sequencing) ─────────────────────────────
+print("\n[6/9] Training Random Forest classifier ...")
+rf_model = RandomForestClassifier(
+    n_estimators=300, max_depth=12, min_samples_leaf=5,
+    class_weight="balanced", n_jobs=-1, random_state=SEED,
 )
-xgb_model.fit(
-    X_train_sc, y_train_bal.ravel(),   # flat scaled features + SMOTE-balanced
-    eval_set=[(X_val_sc, y_val)],
-    verbose=50,
-)
-xgb_prob_test = xgb_model.predict_proba(X_test_sc)[:, 1]
-xgb_auc = roc_auc_score(y_test, xgb_prob_test)
-print(f"      XGBoost test AUC: {xgb_auc:.4f}")
+rf_model.fit(X_train_bal, y_train_bal.ravel())
+rf_prob_test = rf_model.predict_proba(X_test_sc)[:, 1]
+rf_auc = roc_auc_score(y_test, rf_prob_test)
+print(f"      RandomForest test AUC: {rf_auc:.4f}")
 
 # ── BiLSTM ────────────────────────────────────────────────────────────────────
 print("\n[7/9] Training BiLSTM + Attention ...")
@@ -264,8 +255,8 @@ model.fit(
 # ── Ensemble evaluation ───────────────────────────────────────────────────────
 print("\n[8/9] Ensemble evaluation ...")
 bilstm_prob = model.predict(X_test_seq, verbose=0).ravel()
-# Ensemble = weighted average (BiLSTM 40%, XGBoost 60%)
-ensemble_prob = 0.4 * bilstm_prob + 0.6 * xgb_prob_test
+# Ensemble = weighted average (BiLSTM 40%, RandomForest 60%)
+ensemble_prob = 0.4 * bilstm_prob + 0.6 * rf_prob_test
 ens_auc = roc_auc_score(y_test, ensemble_prob)
 print(f"      Ensemble AUC: {ens_auc:.4f}")
 
@@ -296,8 +287,8 @@ print("\n[9/9] Saving artifacts ...")
 np.save(f"{ARTIFACT_DIR}/shap_background.npy", X_train_seq[:200])
 model.save(f"{ARTIFACT_DIR}/bilstm_attention_model.keras")
 attn_model.save(f"{ARTIFACT_DIR}/bilstm_attention_with_weights.keras")
-joblib.dump(scaler,     f"{ARTIFACT_DIR}/scaler.pkl")
-joblib.dump(xgb_model,  f"{ARTIFACT_DIR}/xgb_model.pkl")
+joblib.dump(scaler,    f"{ARTIFACT_DIR}/scaler.pkl")
+joblib.dump(rf_model,  f"{ARTIFACT_DIR}/xgb_model.pkl")  # kept filename for service compat
 
 with open(f"{ARTIFACT_DIR}/feature_names.json", "w") as f:
     json.dump(feature_names, f, indent=2)
@@ -307,7 +298,7 @@ with open(f"{ARTIFACT_DIR}/group_config.json", "w") as f:
                "stats": STAT_NAMES}, f, indent=2)
 with open(f"{ARTIFACT_DIR}/threshold_config.json", "w") as f:
     json.dump({"decision_threshold": round(best_thresh, 2),
-               "ensemble_weights": {"bilstm": 0.4, "xgboost": 0.6}}, f, indent=2)
+               "ensemble_weights": {"bilstm": 0.4, "random_forest": 0.6}}, f, indent=2)
 
 for fn in ["bilstm_attention_model.keras","bilstm_attention_with_weights.keras",
            "scaler.pkl","xgb_model.pkl","feature_names.json",
