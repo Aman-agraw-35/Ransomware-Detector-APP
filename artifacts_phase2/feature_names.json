@@ -1,0 +1,17 @@
+[
+  "NumberOfSections",
+  "SizeOfStackReserve",
+  "ResourceSize",
+  "BitcoinAddresses",
+  "is_64bit",
+  "dll_high_entropy_va",
+  "dll_dynamic_base",
+  "dll_nx_compat",
+  "dll_no_seh",
+  "dll_guard_cf",
+  "dll_terminal_server",
+  "has_exports",
+  "has_debug_info",
+  "has_iat",
+  "is_large_stack"
+]

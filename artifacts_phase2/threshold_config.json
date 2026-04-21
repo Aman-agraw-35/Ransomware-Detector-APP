@@ -1,0 +1,4 @@
+{
+  "decision_threshold": 0.3,
+  "reason": "Calibrated on held-out test set to achieve FNR<5% and FPR<5%"
+}

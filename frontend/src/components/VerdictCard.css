@@ -1,0 +1,170 @@
+.verdict-card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+.verdict-card--danger {
+  background: linear-gradient(140deg, rgba(239,68,68,0.12) 0%, rgba(239,68,68,0.05) 60%, var(--bg-card) 100%);
+  border-color: var(--danger-border);
+  box-shadow: 0 0 40px rgba(239,68,68,0.12), var(--shadow-card);
+}
+
+.verdict-card--safe {
+  background: linear-gradient(140deg, rgba(34,197,94,0.10) 0%, rgba(34,197,94,0.04) 60%, var(--bg-card) 100%);
+  border-color: var(--safe-border);
+  box-shadow: 0 0 40px rgba(34,197,94,0.10), var(--shadow-card);
+}
+
+.verdict-card__glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  top: -80px;
+  right: -60px;
+  pointer-events: none;
+  filter: blur(48px);
+  opacity: 0.35;
+}
+
+.verdict-card--danger .verdict-card__glow {
+  background: var(--danger);
+}
+
+.verdict-card--safe .verdict-card__glow {
+  background: var(--safe);
+}
+
+.verdict-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.verdict-card__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.verdict-card--danger .verdict-card__pill {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.verdict-card--safe .verdict-card__pill {
+  background: var(--safe-soft);
+  color: var(--safe);
+  border: 1px solid var(--safe-border);
+}
+
+.verdict-card__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.verdict-card__dot--danger { background: var(--danger); }
+.verdict-card__dot--safe { background: var(--safe); }
+
+.verdict-card__filename {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  text-align: right;
+}
+
+.verdict-card__body {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.verdict-card__label-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.verdict-card__verdict-text {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.verdict-card--danger .verdict-card__verdict-text { color: var(--danger); }
+.verdict-card--safe .verdict-card__verdict-text { color: var(--safe); }
+
+.verdict-card__verdict-sub {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Confidence Ring */
+.verdict-card__ring-block {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.conf-ring {
+  width: 96px;
+  height: 96px;
+  transform: rotate(-90deg);
+}
+
+.conf-ring__track {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 7;
+}
+
+.conf-ring__fill {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.conf-ring__fill--danger { stroke: var(--danger); filter: drop-shadow(0 0 4px var(--danger-glow)); }
+.conf-ring__fill--safe { stroke: var(--safe); filter: drop-shadow(0 0 4px var(--safe-glow)); }
+
+.conf-ring__text {
+  fill: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  transform: rotate(90deg);
+  transform-origin: 50px 50px;
+}
+
+.verdict-card__ring-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.verdict-card__ring-label strong {
+  color: var(--text-secondary);
+}

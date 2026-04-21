@@ -1,0 +1,48 @@
+{
+  "group_names": [
+    "security_flags",
+    "architecture",
+    "presence_flags",
+    "pe_structure",
+    "resources",
+    "memory",
+    "bitcoin"
+  ],
+  "groups": {
+    "security_flags": [
+      6,
+      7,
+      5,
+      8,
+      9,
+      10
+    ],
+    "architecture": [
+      4,
+      14
+    ],
+    "presence_flags": [
+      11,
+      12,
+      13
+    ],
+    "pe_structure": [
+      0
+    ],
+    "resources": [
+      2
+    ],
+    "memory": [
+      1
+    ],
+    "bitcoin": [
+      3
+    ]
+  },
+  "stats": [
+    "mean",
+    "std",
+    "min",
+    "max"
+  ]
+}

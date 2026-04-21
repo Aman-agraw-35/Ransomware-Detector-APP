@@ -1,0 +1,108 @@
+.diag-panel {
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  border: 1px solid transparent;
+}
+
+.diag-panel--good {
+  background: rgba(34, 197, 94, 0.05);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.diag-panel--warn {
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.diag-panel--bad {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.diag-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.diag-panel__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.diag-panel__title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.diag-panel__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  font-size: 0.82rem;
+}
+
+.diag-panel__grid dt {
+  color: var(--text-muted);
+  white-space: nowrap;
+  align-self: start;
+  padding-top: 1px;
+}
+
+.diag-panel__grid dd {
+  color: var(--text-secondary);
+  min-width: 0;
+}
+
+.diag-panel__filename {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.diag-panel__count {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.diag-panel__count--good { color: var(--safe); }
+.diag-panel__count--warn { color: var(--warn); }
+.diag-panel__count--bad { color: var(--danger); }
+
+.diag-panel__missing-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.diag-panel__tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.73rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--text-muted);
+}
+
+.diag-panel__more {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.diag-panel__warn-note {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--danger);
+  opacity: 0.8;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 8px;
+}

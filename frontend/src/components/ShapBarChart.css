@@ -1,0 +1,130 @@
+.shap-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.shap-base-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-subtle);
+}
+
+.shap-base-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.shap-base-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-mono);
+}
+
+.shap-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.shap-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.shap-legend__swatch {
+  width: 24px;
+  height: 6px;
+  border-radius: 999px;
+}
+
+.shap-legend__item--pos .shap-legend__swatch {
+  background: linear-gradient(90deg, #fb923c, #ef4444);
+}
+
+.shap-legend__item--neg .shap-legend__swatch {
+  background: linear-gradient(90deg, #38bdf8, #2563eb);
+}
+
+.shap-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.shap-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.shap-row__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.shap-row__rank {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  width: 22px;
+}
+
+.shap-row__name {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shap-row__value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.shap-row__value--pos { color: var(--shap-pos); }
+.shap-row__value--neg { color: var(--shap-neg); }
+
+.shap-row__bar-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.shap-row__bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shap-row__bar--pos {
+  background: linear-gradient(90deg, #fb923c 0%, #ef4444 100%);
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.4);
+}
+
+.shap-row__bar--neg {
+  background: linear-gradient(90deg, #38bdf8 0%, #2563eb 100%);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}

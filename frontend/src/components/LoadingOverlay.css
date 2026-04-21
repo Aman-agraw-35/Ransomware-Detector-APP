@@ -1,0 +1,108 @@
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 12, 20, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fade-in-up 0.2s ease;
+}
+
+.loading-overlay__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 48px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card), 0 0 60px rgba(59,130,246,0.1);
+  min-width: 280px;
+}
+
+/* Scanner rings */
+.loading-scanner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-scanner__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+
+.loading-scanner__ring--outer {
+  inset: 0;
+  border-color: var(--accent);
+  opacity: 0.3;
+  animation: spin 2.5s linear infinite;
+  border-top-color: transparent;
+  border-right-color: var(--accent);
+}
+
+.loading-scanner__ring--inner {
+  inset: 12px;
+  border-color: rgba(59, 130, 246, 0.5);
+  border-bottom-color: transparent;
+  animation: spin 1.8s linear infinite reverse;
+}
+
+.loading-scanner__core {
+  width: 36px;
+  height: 36px;
+  background: var(--accent-soft);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.loading-scanner__core svg {
+  width: 20px;
+  height: 20px;
+}
+
+.loading-overlay__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.loading-overlay__step {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 1.4em;
+}
+
+.loading-overlay__progress {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.loading-overlay__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border-default);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.loading-overlay__dot--active {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  transform: scale(1.2);
+}

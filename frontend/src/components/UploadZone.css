@@ -1,0 +1,185 @@
+.upload-zone {
+  position: relative;
+  border: 1.5px dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  cursor: pointer;
+  background: var(--bg-elevated);
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.upload-zone:hover,
+.upload-zone:focus-visible {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06) 0%, var(--bg-elevated) 100%);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-card);
+}
+
+.upload-zone--drag {
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: 0 0 0 4px var(--accent-soft), var(--shadow-glow-accent);
+}
+
+.upload-zone--has-file {
+  border-style: solid;
+  border-color: var(--border-accent);
+  background: rgba(59, 130, 246, 0.04);
+}
+
+/* Corner brackets */
+.upload-zone__corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--accent);
+  border-style: solid;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.upload-zone:hover .upload-zone__corner,
+.upload-zone:focus-visible .upload-zone__corner,
+.upload-zone--drag .upload-zone__corner {
+  opacity: 0.7;
+}
+
+.upload-zone__corner--tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+.upload-zone__corner--tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+.upload-zone__corner--bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+.upload-zone__corner--br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+.upload-zone input {
+  display: none;
+}
+
+/* Idle state */
+.upload-zone__idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.upload-zone__icon {
+  width: 52px;
+  height: 52px;
+  color: var(--accent);
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.upload-zone:hover .upload-zone__icon {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.upload-zone__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.upload-zone__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.upload-zone__badge {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.upload-zone__cta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* File info state */
+.upload-zone__file-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.upload-zone__file-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.upload-zone__file-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.upload-zone__file-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.upload-zone__file-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-zone__file-size {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.upload-zone__clear-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-default);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.upload-zone__clear-btn:hover {
+  color: var(--danger);
+  border-color: var(--danger-border);
+  background: var(--danger-soft);
+}
+
+.upload-zone__clear-btn svg {
+  width: 14px;
+  height: 14px;
+}
